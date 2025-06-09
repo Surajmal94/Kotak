@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dost Detail Form</title>
+</head>
+<body>
+  <h2>Dost Ki Detail Form</h2>
+
+  <div id="formSection">
+    <input type="text" id="nameInput" placeholder="Naam"><br><br>
+    <input type="text" id="mobileInput" placeholder="Mobile Number"><br><br>
+    <input type="email" id="emailInput" placeholder="Email ID"><br><br>
+    <button onclick="generateURL()">Submit</button>
+  </div>
+
+  <div id="outputSection" style="display:none;">
+    <h3>Yeh Link Apne Dost Ko Bhej Do:</h3>
+    <p id="resultURL" style="color:blue;"></p>
+    <button onclick="copyLink()">Link Copy Karo</button>
+  </div>
+
+  <script>
+    function generateURL() {
+      const name = encodeURIComponent(document.getElementById("nameInput").value.trim());
+      const mobile = encodeURIComponent(document.getElementById("mobileInput").value.trim());
+      const email = encodeURIComponent(document.getElementById("emailInput").value.trim());
+
+      if (name && mobile && email) {
+        const newURL = `${window.location.origin}${window.location.pathname}?name=${name}&mobile=${mobile}&email=${email}`;
+        document.getElementById("resultURL").innerText = newURL;
+        document.getElementById("outputSection").style.display = "block";
+      } else {
+        alert("Sabhi fields bharna zaroori hai.");
+      }
+    }
+
+    function copyLink() {
+      const text = document.getElementById("resultURL").innerText;
+      navigator.clipboard.writeText(text);
+      alert("Link copy ho gaya! Ab ise apne dost ko bhej sakte ho.");
+    }
+
+    // Jab URL open ho, toh data read-only mein dikhao
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+      const mobile = params.get("mobile");
+      const email = params.get("email");
+
+      if (name && mobile && email) {
+        document.body.innerHTML = `
+          <h2>Dost Ki Detail</h2>
+          <p><strong>Naam:</strong> ${decodeURIComponent(name)}</p>
+          <p><strong>Mobile:</strong> ${decodeURIComponent(mobile)}</p>
+          <p><strong>Email:</strong> ${decodeURIComponent(email)}</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
